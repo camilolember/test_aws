@@ -32,7 +32,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.app_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
-    origin_id                = local.s3_origin_id
+    origin_id                = aws_s3_bucket.app_bucket.s3_origin_id
   }
 
   enabled             = true
@@ -40,12 +40,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   comment             = "Some comment"
   default_root_object = "index.html"
 
-  aliases = ["mysite.${local.my_domain}", "yoursite.${local.my_domain}"]
-
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = aws_s3_bucket.app_bucket.s3_origin_id
 
     forwarded_values {
       query_string = false
