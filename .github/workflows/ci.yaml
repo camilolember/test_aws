@@ -44,8 +44,10 @@ jobs:
           terraform_version: "1.14.6"
 
       - name: Terraform init
+        working_directory: terraform/environments/devel/
         run: terraform init
 
       - name: Terraform plan
+        working_directory: terraform/environments/devel/
         run: terraform plan
 
