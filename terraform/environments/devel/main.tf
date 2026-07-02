@@ -10,5 +10,5 @@ terraform {
 }
 
 module "deploy_infra" {
-  source      = "./modules/app/"
+  source      = "../../modules/app/"
 }
