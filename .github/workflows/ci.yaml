@@ -51,6 +51,6 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        working-directory: .terraform/environments/devel/
+        working-directory: ./terraform/environments/devel/
         run: terraform plan
 
