@@ -59,12 +59,19 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
   }
   
-  logging_configuration {
+  logging_config {
     bucket = aws_s3_bucket.logs_bucket
   }
 
   viewer_certificate {
     cloudfront_default_certificate = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US", "CA", "GB", "DE"]
+    }
   }
 }
 
