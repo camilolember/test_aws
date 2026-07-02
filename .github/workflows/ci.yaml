@@ -38,16 +38,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: terraform setup 
         uses: hashicorp/setup-terraform@v4
         with: 
           terraform_version: "1.14.6"
 
       - name: Terraform init
-        working-directory: terraform/environments/devel/
+        working-directory: ./terraform/environments/devel/
         run: terraform init
 
       - name: Terraform plan
-        working-directory: terraform/environments/devel/
+        working-directory: .terraform/environments/devel/
         run: terraform plan
 
