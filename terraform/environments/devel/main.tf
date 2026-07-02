@@ -11,8 +11,8 @@ terraform {
 
 provider "aws" {
   region     = "us-east_1"
-  access_key = ${ secrets.AWS_ACCESS_KEY }
-  secret_key = ${ secrets.AWS_SECRET_ACCESS_KEY }
+  access_key = ${{ secrets.AWS_ACCESS_KEY }}
+  secret_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 }
 
 module "deploy_infra" {
