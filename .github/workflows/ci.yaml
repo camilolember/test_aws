@@ -33,3 +33,10 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Terraform init
+        run: terraform init
+
