@@ -8,3 +8,7 @@ terraform {
 
   required_version = ">= 1.2"
 }
+
+module "deploy_infra" {
+  source      = "./modules/app/"
+}
