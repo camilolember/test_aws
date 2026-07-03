@@ -59,5 +59,9 @@ jobs:
       - name: Terraform plan
         working-directory: ./terraform/environments/devel/
         run: |
-          echo "access key is $AWS_ACCESS_KEY_ID"
           terraform plan
+
+      - name: Terraform apply
+        working-directory: ./terraform/environments/devel/
+        run: |
+          terraform apply
