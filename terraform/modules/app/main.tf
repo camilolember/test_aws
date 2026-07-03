@@ -18,6 +18,13 @@ resource "aws_s3_bucket" "clemustest-logs-bucket" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "clemustest-bucket-oc" {
+  bucket = aws_s3_bucket.clemustest-logs-bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_acl" "aws-logs-bucket-acl" {
   bucket = aws_s3_bucket.clemustest-logs-bucket.id
   acl = "log-delivery-write"
