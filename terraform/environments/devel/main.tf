@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region     = "us-east_1"
+  region     = "us-east-1"
 }
 
 module "deploy_infra" {
