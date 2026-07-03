@@ -64,4 +64,9 @@ jobs:
       - name: Terraform apply
         working-directory: ./terraform/environments/devel/
         run: |
-          terraform apply
+          terraform apply -auto-approve
+
+      - name: aws sync
+        working-directory: ./terraform/environments/devel/
+        run: |
+          aws s3 sync ./build s3://${{ env.BUCKET_NAME }} --delete
