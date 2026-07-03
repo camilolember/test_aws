@@ -67,6 +67,7 @@ jobs:
           terraform apply -auto-approve
 
       - name: aws sync
-        working-directory: ./terraform/environments/devel/
         run: |
+          pwd
+          ls -la
           aws s3 sync ./build s3://${{ env.BUCKET_NAME }} --delete
