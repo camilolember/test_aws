@@ -20,7 +20,7 @@ resource "aws_s3_bucket" "clemustest-logs-bucket" {
 
 #cloudfront origin access control
 resource "aws_cloudfront_origin_access_control" "clemus-test-oac" {
-  name                              = "oac"
+  name                              = "clemus-test-oac"
   description                       = "OAC  Policy"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -31,7 +31,7 @@ resource "aws_cloudfront_origin_access_control" "clemus-test-oac" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.clemustest-app-bucket.bucket_regional_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.clemus-test-oac.id
     origin_id                = "s3-origin"
   }
 
