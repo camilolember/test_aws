@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "clemustest_app_bucket" {
   bucket = "clemustest_app_bucket_${var.env}"
 
   tags = {
-    Name        = "app_bucket"
+    Name        = "clemustest_app_bucket"
     Environment = "Dev"
   }
 }
@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "clemustest_logs_bucket" {
   bucket = "clemustest_logs_bucket_${var.env}"
 
   tags = {
-    Name        = "logs_bucket"
+    Name        = "clemustest_logs_bucket"
     Environment = "Dev"
   }
 }
@@ -30,7 +30,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 #cloudfront distribution
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.app_bucket.bucket_regional_domain_name
+    domain_name              = aws_s3_bucket.clemustest_app_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
     origin_id                = "s3-origin"
   }
@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   
   logging_config {
-    bucket = aws_s3_bucket.logs_bucket.bucket_domain_name
+    bucket = aws_s3_bucket.clemustest_logs_bucket.bucket_domain_name
   }
 
   viewer_certificate {
