@@ -18,6 +18,12 @@ resource "aws_s3_bucket" "clemustest-logs-bucket" {
   }
 }
 
+resource "aws_s3_bucket" "example" {
+  bucket = "clemustest-logs-bucket.id"
+  acl = "log-delivery-write"
+}
+
+
 #cloudfront origin access control
 resource "aws_cloudfront_origin_access_control" "clemus-test-oac" {
   name                              = "clemus-test-oac"
@@ -59,7 +65,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
   }
   
-  logging_config {
+    logging_config {
     bucket = aws_s3_bucket.clemustest-logs-bucket.bucket_domain_name
   }
 
