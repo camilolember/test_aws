@@ -1,5 +1,5 @@
 terraform {
-  backend "remote"{
+  backend "s3"{
     bucket = "clemus-demo-bucket"
     key    = "devel/terraform.tfstate"
     region = "us-east-1"
