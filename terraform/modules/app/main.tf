@@ -19,7 +19,7 @@ resource "aws_s3_bucket" "clemustest-logs-bucket" {
 }
 
 #cloudfront origin access control
-resource "aws_cloudfront_origin_access_control" "oac" {
+resource "aws_cloudfront_origin_access_control" "clemus-test-oac" {
   name                              = "oac"
   description                       = "OAC  Policy"
   origin_access_control_origin_type = "s3"
