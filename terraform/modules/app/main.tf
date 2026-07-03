@@ -28,6 +28,7 @@ resource "aws_s3_bucket_ownership_controls" "clemustest-bucket-oc" {
 resource "aws_s3_bucket_acl" "aws-logs-bucket-acl" {
   bucket = aws_s3_bucket.clemustest-logs-bucket.id
   acl = "log-delivery-write"
+  depends_on = [aws_s3_bucket_ownership_controls.clemustest-bucket-oc]
 }
 
 
