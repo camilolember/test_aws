@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "clemustest-logs-bucket" {
   }
 }
 
-resource "aws_s3_bucket" "example" {
+resource "aws_s3_bucket_acl" "aws-logs-bucket-acl" {
   bucket = "clemustest-logs-bucket.id"
   acl = "log-delivery-write"
 }
