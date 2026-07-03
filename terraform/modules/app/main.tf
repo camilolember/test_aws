@@ -1,6 +1,6 @@
 #bucket for app
-resource "aws_s3_bucket" "clemustest_app_bucket_${var.env}" {
-  bucket = "clemustest_app_bucket"
+resource "aws_s3_bucket" "clemustest_app_bucket" {
+  bucket = "clemustest_app_bucket_${var.env}"
 
   tags = {
     Name        = "app_bucket"
@@ -9,8 +9,8 @@ resource "aws_s3_bucket" "clemustest_app_bucket_${var.env}" {
 }
 
 #bucket for logs
-resource "aws_s3_bucket" "clemustest_logs_bucket_${var.env}" {
-  bucket = "clemustest_logs_bucket"
+resource "aws_s3_bucket" "clemustest_logs_bucket" {
+  bucket = "clemustest_logs_bucket_${var.env}"
 
   tags = {
     Name        = "logs_bucket"
