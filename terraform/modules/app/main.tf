@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   
   logging_config {
-    bucket = aws_s3_bucket.logs_bucket
+    bucket = aws_s3_bucket.logs_bucket.bucket_domain_name
   }
 
   viewer_certificate {
