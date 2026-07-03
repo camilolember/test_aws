@@ -83,3 +83,8 @@ jobs:
           pwd
           ls -la
           aws s3 sync ./build s3://clemustest-app-bucket-devel --delete
+
+      - name: Terraform Destroy
+        working-directory: ./terraform/environments/devel/
+        run: |
+          terraform destroy -auto-approve
