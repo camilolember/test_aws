@@ -1,6 +1,7 @@
 #bucket for app
 resource "aws_s3_bucket" "clemustest-app-bucket" {
   bucket = "clemustest-app-bucket-${var.env}"
+  force_destroy = true
 
   tags = {
     Name        = "clemustest-app-bucket"
@@ -11,6 +12,7 @@ resource "aws_s3_bucket" "clemustest-app-bucket" {
 #bucket for logs
 resource "aws_s3_bucket" "clemustest-logs-bucket" {
   bucket = "clemustest-logs-bucket-${var.env}"
+  force_destroy = true
 
   tags = {
     Name        = "clemustest-logs-bucket"
