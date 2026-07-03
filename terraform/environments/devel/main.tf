@@ -15,4 +15,5 @@ provider "aws" {
 
 module "deploy_infra" {
   source      = "../../modules/app/"
+  env          = "devel"
 }
