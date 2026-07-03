@@ -60,4 +60,4 @@ jobs:
         working-directory: ./terraform/environments/devel/
         run: |
           echo "access key is $AWS_ACCESS_KEY_ID"
-          terrafom plan
+          terraform plan
