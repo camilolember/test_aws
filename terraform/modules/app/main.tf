@@ -91,6 +91,29 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
+data "aws_iam_policy_document" "s3_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.clemustest-app-bucket.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    # Condición estricta: Solo TU distribución de CloudFront puede leer
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "app_bucket_policy" {
+  bucket = aws_s3_bucket.clemustest-app-bucket.id
+  policy = data.aws_iam_policy_document.s3_policy.json
+}
 
 
 
