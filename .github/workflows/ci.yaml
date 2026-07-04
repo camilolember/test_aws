@@ -46,6 +46,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      DESTROY: 'true' # Local para este Job
 
     steps: 
       - name: Checkout Code
@@ -85,6 +86,7 @@ jobs:
           aws s3 sync ./build s3://clemustest-app-bucket-devel --delete
 
       - name: Terraform Destroy
+        if: env.DESTROY == 'true'
         working-directory: ./terraform/environments/devel/
         run: |
           terraform destroy -auto-approve
