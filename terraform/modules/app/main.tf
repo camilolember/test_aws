@@ -1,0 +1,119 @@
+#bucket for app
+resource "aws_s3_bucket" "clemustest-app-bucket" {
+  bucket = "clemustest-app-bucket-${var.env}"
+  force_destroy = true
+
+  tags = {
+    Name        = "clemustest-app-bucket"
+    Environment = "Dev"
+  }
+}
+
+#bucket for logs
+resource "aws_s3_bucket" "clemustest-logs-bucket" {
+  bucket = "clemustest-logs-bucket-${var.env}"
+  force_destroy = true
+
+  tags = {
+    Name        = "clemustest-logs-bucket"
+    Environment = "Dev"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "clemustest-bucket-oc" {
+  bucket = aws_s3_bucket.clemustest-logs-bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "aws-logs-bucket-acl" {
+  bucket = aws_s3_bucket.clemustest-logs-bucket.id
+  acl = "log-delivery-write"
+  depends_on = [aws_s3_bucket_ownership_controls.clemustest-bucket-oc]
+}
+
+
+#cloudfront origin access control
+resource "aws_cloudfront_origin_access_control" "clemus-test-oac" {
+  name                              = "clemus-test-oac"
+  description                       = "OAC  Policy"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+#cloudfront distribution
+resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name              = aws_s3_bucket.clemustest-app-bucket.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.clemus-test-oac.id
+    origin_id                = "s3-origin"
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "Some comment"
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "s3-origin"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "allow-all"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+  
+    logging_config {
+    bucket = aws_s3_bucket.clemustest-logs-bucket.bucket_domain_name
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US", "CA", "CO"] # <--- Agrega "CO" a la lista
+    }
+  }
+}
+
+data "aws_iam_policy_document" "s3_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.clemustest-app-bucket.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    # Condición estricta: Solo TU distribución de CloudFront puede leer
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "app_bucket_policy" {
+  bucket = aws_s3_bucket.clemustest-app-bucket.id
+  policy = data.aws_iam_policy_document.s3_policy.json
+}
+
+
+
